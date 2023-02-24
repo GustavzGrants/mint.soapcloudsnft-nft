@@ -1,9 +1,9 @@
+import { useProgram, useClaimNFT, useClaimConditions, useProgramMetadata } from "@thirdweb-dev/react/solana";
 import type { NextPage } from "next";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 
-// Default styles that can be overridden by your app
 require("@solana/wallet-adapter-react-ui/styles.css");
 
 const WalletMultiButtonDynamic = dynamic(
@@ -13,55 +13,39 @@ const WalletMultiButtonDynamic = dynamic(
 );
 
 const Home: NextPage = () => {
-  // Here's how to get the thirdweb SDK instance
-  // const sdk = useSDK();
-  // Here's how to get a nft collection
-  // const { program } = useProgram(
-  //   your_nft_collection_address,
-  //   "nft-collection"
-  // );
+  const { program } = useProgram("3omU8aCuj8rZKwEHBx39ciQAMtEDU1L12N68bPE2Kz7r", "nft-drop")
+  const { mutateAsync: claim, isLoading } = useClaimNFT(program);
+  const { data: conditions, isLoading: conditionsIsLoading } =
+   useClaimConditions(program); 
+  const { data: metadata, isLoading: metadataIsLoading } =
+   useProgramMetadata(program); 
 
   return (
-    <>
-      <div className={styles.container}>
-        <div className={styles.iconContainer}>
-          <Image
-            src="/thirdweb.svg"
-            height={75}
-            width={115}
-            style={{
-              objectFit: "contain",
-            }}
-            alt="thirdweb"
-          />
-          <Image
-            width={75}
-            height={75}
-            src="/sol.png"
-            className={styles.icon}
-            alt="sol"
-          />
-        </div>
-        <h1 className={styles.h1}>Solana, meet thirdweb 👋</h1>
-        <p className={styles.explain}>
-          Explore what you can do with thirdweb&rsquo;s brand new{" "}
-          <b>
-            <a
-              href="https://portal.thirdweb.com/solana"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.lightPurple}
-            >
-              Solana SDK
-            </a>
-          </b>
-          .
-        </p>
-
-        <WalletMultiButtonDynamic />
+    <div className={styles.page}>
+      <div className={styles.header}>
+      <WalletMultiButtonDynamic />
       </div>
-    </>
+      <br />
+      <div>
+          <Image
+            width={300}
+            height={300}
+            src="/soapcloudsgif.gif"
+            className={styles.icon}
+            alt="gif"
+          />
+        <h1 className={styles.h1}>Welcome to the mint page of SoapCloudNFT project</h1>
+        {metadataIsLoading ? <p>...</p> : <p>{metadata?.description}</p>}
+        <button className={styles.btn} disabled={isLoading} onClick={() => claim({amount: 1})}>
+      CLAIM
+    </button>
+    {conditionsIsLoading ? <p>_/_</p> : 
+    <p>{conditions?.totalAvailableSupply}/{conditions?.claimedSupply}</p>}
+      </div>
+    </div>
   );
 };
 
 export default Home;
+
+
