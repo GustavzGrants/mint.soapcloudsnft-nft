@@ -34,7 +34,7 @@ const Home: NextPage = () => {
             className={styles.icon}
             alt="gif"
           />
-        <h1 className={styles.h1}>Welcome to the mint page of SoapCloudNFT project</h1>
+        <h1 className={styles.h1}>Welcome to the mint page of SoapCloudNFT project  Price: 1 SOL</h1>
         {metadataIsLoading ? <p>...</p> : <p>{metadata?.description}</p>}
         <button className={styles.btn} disabled={isLoading} onClick={() => claim({amount: 1})}>
       CLAIM
@@ -42,6 +42,8 @@ const Home: NextPage = () => {
     {conditionsIsLoading ? <p>_/_</p> : 
     <p>{conditions?.totalAvailableSupply}/{conditions?.claimedSupply}</p>}
       </div>
+      <div style={{
+    }}></div>
     </div>
   );
 };
